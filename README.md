@@ -6,8 +6,8 @@ Este projeto é uma aplicação de Gerenciamento Financeiro, desenvolvida em Jav
 
 ## Autores
 
-- Allan [@-](https://www.github.com/octokatherine)
-- Eduardo Belchior [@educhior](https://www.github.com/Educhior)
+- ALLAN VICTOR FARIAS DE OLIVEIRA - 20210051468 [@Allan073-](https://github.com/Allan073)
+- EDUARDO DE SOUZA BLECHIOR - 20240002240 [@educhior](https://www.github.com/Educhior)
 
 
 ## Funcionalidades
