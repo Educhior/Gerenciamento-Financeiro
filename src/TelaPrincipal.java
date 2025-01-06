@@ -37,14 +37,15 @@ public class TelaPrincipal extends JFrame {
 
         // Ação para o botão de adicionar receita
         botaoAdicionarReceita.addActionListener(e -> {
-            TelaAdicionarReceita telaAdicionarReceita = new TelaAdicionarReceita();
-            telaAdicionarReceita.setVisible(true);
+            TelaAdicionarReceitaSimples telaAdicionarReceitaSimples = new TelaAdicionarReceitaSimples();
+            telaAdicionarReceitaSimples.setVisible(true);
+            
         });
 
         // Ação para o botão de adicionar despesa
         botaoAdicionarDespesa.addActionListener(e -> {
-            TelaAdicionarDespesa telaAdicionarDespesa = new TelaAdicionarDespesa();
-            telaAdicionarDespesa.setVisible(true);
+            TelaAdicionarDespesaSimples telaAdicionarDespesaSimples = new TelaAdicionarDespesaSimples();
+            telaAdicionarDespesaSimples.setVisible(true);
         });
     }
 
@@ -75,22 +76,5 @@ public class TelaPrincipal extends JFrame {
             TelaPrincipal telaPrincipal = new TelaPrincipal();
             telaPrincipal.setVisible(true);
         });
-    }
-}
-
-// Classes adicionais para as telas de "Adicionar Receita" e "Adicionar Despesa"
-class TelaAdicionarReceita extends JFrame {
-    public TelaAdicionarReceita() {
-        setTitle("Adicionar Receita");
-        setSize(400, 300);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    }
-}
-
-class TelaAdicionarDespesa extends JFrame {
-    public TelaAdicionarDespesa() {
-        setTitle("Adicionar Despesa");
-        setSize(400, 300);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 }
