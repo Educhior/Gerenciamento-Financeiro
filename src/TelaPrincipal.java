@@ -42,7 +42,7 @@ public class TelaPrincipal extends JFrame {
         painelBotoes.add(botaoAdicionarDespesa);
         painelBotoes.add(sair);
 
-        // Adiciona os painéis à janela principal
+        // Painéis à janela principal
         add(painelResumo, BorderLayout.NORTH);
         add(painelGrafico, BorderLayout.CENTER);
         add(painelBotoes, BorderLayout.SOUTH);

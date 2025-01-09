@@ -6,7 +6,7 @@ public class GerenciadorDespesasCSV {
     private static final String ARQUIVO_DESPESAS = "despesas.csv";
 
     public static void salvarDespesas(List<Despesa> despesas) throws IOException {
-        BufferedWriter writer = new BufferedWriter(new FileWriter(ARQUIVO_DESPESAS, true)); // Abrir para adicionar
+        BufferedWriter writer = new BufferedWriter(new FileWriter(ARQUIVO_DESPESAS, true));
 
         for (Despesa despesa : despesas) {
             String linha = despesa.getId() + "," + despesa.getValor() + "," + despesa.getDescricao() + "," 
@@ -32,6 +32,6 @@ public class GerenciadorDespesasCSV {
         }
 
         reader.close();
-        return idMax + 1; // Retorna o próximo id
+        return idMax + 1;
     }
 }

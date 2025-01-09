@@ -12,13 +12,15 @@ public class TelaAdicionarReceita extends JFrame {
         setTitle("Adicionar Receita");
         setSize(400, 250);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null); // Centraliza a janela
-        setLayout(new BorderLayout(10, 10)); // Layout principal com bordas
-        // Painel central com GridBagLayout para maior flexibilidade
+        setLocationRelativeTo(null);
+        setLayout(new BorderLayout(10, 10));
+
+        // Painel central
         JPanel painelCentral = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
+
         // Configurando o campo de valor com máscara numérica
         JLabel labelValor = new JLabel("Valor (R$):");
         NumberFormatter formatter = new NumberFormatter(new DecimalFormat("#,##0.00"));
@@ -31,6 +33,7 @@ public class TelaAdicionarReceita extends JFrame {
         campoDescricao = new JTextField(20);
         JLabel labelCategoria = new JLabel("Categoria:");
         campoCategoria = new JTextField(20);
+
         // Adicionando componentes ao painel central
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -47,21 +50,25 @@ public class TelaAdicionarReceita extends JFrame {
         painelCentral.add(labelCategoria, gbc);
         gbc.gridx = 1;
         painelCentral.add(campoCategoria, gbc);
+
         // Painel de botões
         JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         botaoSalvar = new JButton("Salvar Receita");
         botaoCancelar = new JButton("Cancelar");
         painelBotoes.add(botaoSalvar);
         painelBotoes.add(botaoCancelar);
+
         // Adicionando painéis à janela
         add(painelCentral, BorderLayout.CENTER);
         add(painelBotoes, BorderLayout.SOUTH);
+
         // Ações dos botões
         botaoSalvar.addActionListener(e -> salvarReceita());
         botaoCancelar.addActionListener(e -> dispose());
     }
     private void salvarReceita() {
         try {
+
             // Captura e validação de campos
             String valorTexto = campoValor.getText();
             String descricao = campoDescricao.getText().trim();
@@ -72,7 +79,7 @@ public class TelaAdicionarReceita extends JFrame {
             }
             // Convertendo valor para número
             double valor = ((Number) campoValor.getValue()).doubleValue();
-            // Criando a receita (gerando um id sequencial, por exemplo)
+            // Criando a receita
             Receita receita = new Receita(1, valor, descricao, categoria, "2025-01-09T14:00:00");
             // Salvar receita no arquivo CSV
             GerenciadorReceitasCSV.salvarReceitas(java.util.List.of(receita));
