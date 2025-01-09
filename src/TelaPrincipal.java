@@ -2,6 +2,12 @@ import java.awt.*;
 import javax.swing.*;
 
 public class TelaPrincipal extends JFrame {
+    private JLabel labelCaixaTotal;
+    private JLabel labelDespesas;
+    private JLabel labelReceitas;
+    private double caixaTotal = 15520.00;
+    private double despesas = 530.00;
+    private double receitas = 14990.00;
 
     public TelaPrincipal() {
         setTitle("Gerenciador Financeiro - Tela Principal");
@@ -13,10 +19,13 @@ public class TelaPrincipal extends JFrame {
         JPanel painelResumo = new JPanel(new GridLayout(1, 4, 10, 10));
         painelResumo.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        painelResumo.add(criarPainelResumo("Caixa Total (R$)", "R$ 15.520,00", new Color(76, 175, 80)));
-        painelResumo.add(criarPainelResumo("Despesas (R$)", "R$ 530,00", new Color(244, 67, 54)));
-        painelResumo.add(criarPainelResumo("Receita (R$)", "R$ 14.990,00", new Color(33, 150, 243)));
-        painelResumo.add(criarPainelResumo("Investimentos (R$)", "R$ 15.120,00", new Color(255, 193, 7)));
+        labelCaixaTotal = new JLabel("R$ " + caixaTotal, SwingConstants.CENTER);
+        labelDespesas = new JLabel("R$ " + despesas, SwingConstants.CENTER);
+        labelReceitas = new JLabel("R$ " + receitas, SwingConstants.CENTER);
+
+        painelResumo.add(criarPainelResumo("Caixa Total (R$)", labelCaixaTotal, new Color(76, 175, 80)));
+        painelResumo.add(criarPainelResumo("Despesas (R$)", labelDespesas, new Color(244, 67, 54)));
+        painelResumo.add(criarPainelResumo("Receitas (R$)", labelReceitas, new Color(33, 150, 243)));
 
         // Placeholder para gráfico
         JPanel painelGrafico = new JPanel();
@@ -27,8 +36,11 @@ public class TelaPrincipal extends JFrame {
         JPanel painelBotoes = new JPanel();
         JButton botaoAdicionarReceita = new JButton("Adicionar Receita");
         JButton botaoAdicionarDespesa = new JButton("Adicionar Despesa");
+        JButton sair = new JButton("Sair");
+
         painelBotoes.add(botaoAdicionarReceita);
         painelBotoes.add(botaoAdicionarDespesa);
+        painelBotoes.add(sair);
 
         // Adiciona os painéis à janela principal
         add(painelResumo, BorderLayout.NORTH);
@@ -37,19 +49,28 @@ public class TelaPrincipal extends JFrame {
 
         // Ação para o botão de adicionar receita
         botaoAdicionarReceita.addActionListener(e -> {
-            TelaAdicionarReceitaSimples telaAdicionarReceitaSimples = new TelaAdicionarReceitaSimples();
-            telaAdicionarReceitaSimples.setVisible(true);
-            
+            // Adiciona uma receita e atualiza a tela
+            receitas += 500.00;
+            atualizarResumo();
         });
 
         // Ação para o botão de adicionar despesa
         botaoAdicionarDespesa.addActionListener(e -> {
-            TelaAdicionarDespesaSimples telaAdicionarDespesaSimples = new TelaAdicionarDespesaSimples();
-            telaAdicionarDespesaSimples.setVisible(true);
+            // Adiciona uma despesa e atualiza a tela
+            despesas += 100.00;
+            atualizarResumo();
+        });
+
+        // Ação para o botão de sair
+        sair.addActionListener(e -> {
+            int resposta = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja sair?", "Confirmar saída", JOptionPane.YES_NO_OPTION);
+            if (resposta == JOptionPane.YES_OPTION) {
+                System.exit(0);
+            }
         });
     }
 
-    private JPanel criarPainelResumo(String titulo, String valor, Color cor) {
+    private JPanel criarPainelResumo(String titulo, JLabel valorLabel, Color cor) {
         JPanel painel = new JPanel();
         painel.setLayout(new BorderLayout());
         painel.setBorder(BorderFactory.createLineBorder(cor, 2));
@@ -58,17 +79,22 @@ public class TelaPrincipal extends JFrame {
         labelTitulo.setFont(new Font("Arial", Font.BOLD, 14));
         painel.add(labelTitulo, BorderLayout.NORTH);
 
-        JLabel labelValor = new JLabel(valor, SwingConstants.CENTER);
-        labelValor.setFont(new Font("Arial", Font.BOLD, 20));
-        labelValor.setForeground(cor);
-        painel.add(labelValor, BorderLayout.CENTER);
+        valorLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        valorLabel.setForeground(cor);
+        painel.add(valorLabel, BorderLayout.CENTER);
 
         JButton botaoDetalhes = new JButton("Ver detalhes");
-        botaoDetalhes.addActionListener(e -> 
-            JOptionPane.showMessageDialog(null, "Exibindo detalhes sobre: " + titulo));
+        botaoDetalhes.addActionListener(e -> JOptionPane.showMessageDialog(null, "Exibindo detalhes sobre: " + titulo));
         painel.add(botaoDetalhes, BorderLayout.SOUTH);
 
         return painel;
+    }
+
+    private void atualizarResumo() {
+        // Atualiza os valores exibidos no painel de resumo
+        labelCaixaTotal.setText("R$ " + caixaTotal);
+        labelDespesas.setText("R$ " + despesas);
+        labelReceitas.setText("R$ " + receitas);
     }
 
     public static void main(String[] args) {

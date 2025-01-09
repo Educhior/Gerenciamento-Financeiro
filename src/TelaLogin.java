@@ -1,7 +1,6 @@
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 
 public class TelaLogin extends JFrame {
     private JTextField campoEmail;
@@ -82,6 +81,14 @@ public class TelaLogin extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(null, "Entre em contato com o suporte para redefinir sua senha.");
             }
+        });
+    }
+
+    public static void main(String[] args) {
+        // Inicializa a aplicação
+        SwingUtilities.invokeLater(() -> {
+            TelaLogin telaLogin = new TelaLogin();
+            telaLogin.setVisible(true);
         });
     }
 }
