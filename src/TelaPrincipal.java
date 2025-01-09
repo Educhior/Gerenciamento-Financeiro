@@ -5,9 +5,9 @@ public class TelaPrincipal extends JFrame {
     private JLabel labelCaixaTotal;
     private JLabel labelDespesas;
     private JLabel labelReceitas;
-    private double caixaTotal = 15520.00;
-    private double despesas = 530.00;
-    private double receitas = 14990.00;
+    private double caixaTotal = 0.00;
+    private double despesas = 0.00;
+    private double receitas = 0.00;
 
     public TelaPrincipal() {
         setTitle("Gerenciador Financeiro - Tela Principal");
@@ -51,14 +51,17 @@ public class TelaPrincipal extends JFrame {
         botaoAdicionarReceita.addActionListener(e -> {
             TelaAdicionarReceita telaAdicionarReceita = new TelaAdicionarReceita();
             telaAdicionarReceita.setVisible(true);
+            atualizarValores();
+            atualizarResumo();
         });
 
         // Ação para o botão de adicionar despesa
         botaoAdicionarDespesa.addActionListener(e -> {
             TelaAdicionarDespesa telaAdicionarDespesa = new TelaAdicionarDespesa();
             telaAdicionarDespesa.setVisible(true);
+            atualizarValores();
+            atualizarResumo();
         });
-
 
         // Ação para o botão de sair
         sair.addActionListener(e -> {
@@ -69,7 +72,8 @@ public class TelaPrincipal extends JFrame {
         });
 
         // Atualizar os valores a partir dos arquivos CSV
-        atualizarValoresCSV();
+        atualizarValores();
+        atualizarResumo();
     }
 
     private JPanel criarPainelResumo(String titulo, JLabel valorLabel, Color cor) {
@@ -99,14 +103,11 @@ public class TelaPrincipal extends JFrame {
         labelReceitas.setText("R$ " + receitas);
     }
 
-    private void atualizarValoresCSV() {
+    private void atualizarValores() {
         // Atualiza as receitas e despesas a partir dos arquivos CSV
         receitas = GerenciadorCSV.obterValorTotal("receitas");
         despesas = GerenciadorCSV.obterValorTotal("despesas");
         caixaTotal = receitas - despesas;
-
-        // Atualiza a tela com os valores obtidos
-        atualizarResumo();
     }
 
     public static void main(String[] args) {
