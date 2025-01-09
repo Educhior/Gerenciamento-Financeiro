@@ -49,17 +49,16 @@ public class TelaPrincipal extends JFrame {
 
         // Ação para o botão de adicionar receita
         botaoAdicionarReceita.addActionListener(e -> {
-            // Adiciona uma receita e atualiza a tela
-            receitas += 500.00;
-            atualizarResumo();
+            TelaAdicionarReceita telaAdicionarReceita = new TelaAdicionarReceita();
+            telaAdicionarReceita.setVisible(true);
         });
 
         // Ação para o botão de adicionar despesa
         botaoAdicionarDespesa.addActionListener(e -> {
-            // Adiciona uma despesa e atualiza a tela
-            despesas += 100.00;
-            atualizarResumo();
+            TelaAdicionarDespesa telaAdicionarDespesa = new TelaAdicionarDespesa();
+            telaAdicionarDespesa.setVisible(true);
         });
+
 
         // Ação para o botão de sair
         sair.addActionListener(e -> {
@@ -68,6 +67,9 @@ public class TelaPrincipal extends JFrame {
                 System.exit(0);
             }
         });
+
+        // Atualizar os valores a partir dos arquivos CSV
+        atualizarValoresCSV();
     }
 
     private JPanel criarPainelResumo(String titulo, JLabel valorLabel, Color cor) {
@@ -95,6 +97,16 @@ public class TelaPrincipal extends JFrame {
         labelCaixaTotal.setText("R$ " + caixaTotal);
         labelDespesas.setText("R$ " + despesas);
         labelReceitas.setText("R$ " + receitas);
+    }
+
+    private void atualizarValoresCSV() {
+        // Atualiza as receitas e despesas a partir dos arquivos CSV
+        receitas = GerenciadorCSV.obterValorTotal("receitas");
+        despesas = GerenciadorCSV.obterValorTotal("despesas");
+        caixaTotal = receitas - despesas;
+
+        // Atualiza a tela com os valores obtidos
+        atualizarResumo();
     }
 
     public static void main(String[] args) {
