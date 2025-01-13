@@ -1,7 +1,7 @@
 
 # Gerenciador Financeiro
 
-Este projeto é uma aplicação de Gerenciamento Financeiro, desenvolvida em Java utilizando a biblioteca Swing para a interface gráfica. O objetivo do projeto é permitir que os usuários acompanhem receitas, despesas e o fluxo de caixa de forma simples e intuitiva.
+O projeto de Gerenciamento Financeiro é um sistema para controle de receitas e despesas do usuário. O sistema permite adicionar transações financeiras e calcula automaticamente os totais de receitas, despesas e saldo disponível. A implementação utiliza interface gráfica com a biblioteca Swing em Java e armazena os dados em arquivos CSV.
 
 
 ## Autores
@@ -10,10 +10,14 @@ Este projeto é uma aplicação de Gerenciamento Financeiro, desenvolvida em Jav
 - EDUARDO DE SOUZA BLECHIOR - 20240002240 [@educhior](https://www.github.com/Educhior)
 
 
-## Funcionalidades
+## Como Funciona o Sistema
 
-- **Tela de Login:** Tela para autenticação do usuário.
-- **Tela Principal:** Exibe um resumo financeiro com as receitas e despesas.
-- **Adição de Receitas e Despesas:** Através de botões de ação, o usuário pode adicionar novas receitas e despesas.
-- **Gráficos (Placeholder):** Exibição de gráfico de fluxo de caixa.
+1. **Início**:
+    - O sistema inicia na TelaPrincipal, carregando os totais de receitas, despesas e saldo do arquivo CSV.
+2. **Adicionar Receita/Despesa**:
+    - O usuário adiciona transações através dos botões correspondentes, que abrem as telas TelaAdicionarReceita ou TelaAdicionarDespesa.
+3. **Salvar Dados**:
+    - Após o preenchimento dos campos, os dados são salvos no arquivo CSV.
+4. **Atualização dos Totais**:
+    - A TelaPrincipal atualiza automaticamente os totais após cada registro.
 
