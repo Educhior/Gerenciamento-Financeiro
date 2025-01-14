@@ -12,6 +12,7 @@ public class TelaLogin extends JFrame {
         setTitle("Login - Gerenciador Financeiro");
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
         setLayout(new BorderLayout());
         setResizable(false);
 
