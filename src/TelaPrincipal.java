@@ -1,9 +1,12 @@
 import java.awt.*;
 import java.util.List;
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
+import javax.swing.table.TableRowSorter;
 
 public class TelaPrincipal extends JFrame {
     private JLabel labelCaixaTotal;
@@ -14,101 +17,139 @@ public class TelaPrincipal extends JFrame {
     private double caixaTotal = 0.00;
     private double despesas = 0.00;
     private double receitas = 0.00;
+    private JTextField campoBusca; // Campo de busca
 
     public TelaPrincipal() {
-        setTitle("Gerenciador Financeiro - Tela Principal");
-        setSize(800, 600);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new BorderLayout());
+    setTitle("Gerenciador Financeiro - Tela Principal");
+    setSize(800, 600);
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    setLayout(new BorderLayout());
 
-        // Painel superior com resumo de dados
-        JPanel painelResumo = new JPanel(new GridLayout(1, 4, 10, 10));
-        painelResumo.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+    // Painel superior com resumo de dados
+    JPanel painelResumo = new JPanel(new GridLayout(1, 4, 10, 10));
+    painelResumo.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        labelCaixaTotal = new JLabel("R$ " + caixaTotal, SwingConstants.CENTER);
-        labelDespesas = new JLabel("R$ " + despesas, SwingConstants.CENTER);
-        labelReceitas = new JLabel("R$ " + receitas, SwingConstants.CENTER);
+    labelCaixaTotal = new JLabel("R$ " + caixaTotal, SwingConstants.CENTER);
+    labelDespesas = new JLabel("R$ " + despesas, SwingConstants.CENTER);
+    labelReceitas = new JLabel("R$ " + receitas, SwingConstants.CENTER);
 
-        painelResumo.add(criarPainelResumo("Caixa Total (R$)", labelCaixaTotal, new Color(76, 175, 80)));
-        painelResumo.add(criarPainelResumo("Despesas (R$)", labelDespesas, new Color(244, 67, 54)));
-        painelResumo.add(criarPainelResumo("Receitas (R$)", labelReceitas, new Color(33, 150, 243)));
+    painelResumo.add(criarPainelResumo("Caixa Total (R$)", labelCaixaTotal, new Color(76, 175, 80)));
+    painelResumo.add(criarPainelResumo("Despesas (R$)", labelDespesas, new Color(244, 67, 54)));
+    painelResumo.add(criarPainelResumo("Receitas (R$)", labelReceitas, new Color(33, 150, 243)));
 
-        // Tabela para exibir despesas
-        modeloTabela = new DefaultTableModel(new Object[]{"Data", "Tipo de Entrada", "Descrição", "Categoria", "Valor (R$)"}, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false; // Impede edição
+    // Painel de busca
+    JPanel painelBusca = new JPanel();
+    painelBusca.add(new JLabel("Buscar:"));
+    campoBusca = new JTextField(20);
+    painelBusca.add(campoBusca);
+
+    // Painel superior que contém tanto o painel de resumo quanto o painel de busca
+    JPanel painelSuperior = new JPanel();
+    painelSuperior.setLayout(new BorderLayout());
+    painelSuperior.add(painelResumo, BorderLayout.CENTER);
+    painelSuperior.add(painelBusca, BorderLayout.SOUTH);
+
+    // Tabela para exibir despesas
+    modeloTabela = new DefaultTableModel(new Object[]{"Data", "Tipo de Entrada", "Descrição", "Categoria", "Valor (R$)"}, 0) {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false; // Impede edição
+        }
+    };
+    tabelaDespesas = new JTable(modeloTabela);
+
+    // Impede que as colunas sejam movidas
+    JTableHeader cabecalho = tabelaDespesas.getTableHeader();
+    cabecalho.setReorderingAllowed(false);
+
+    tabelaDespesas.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            String tipoEntrada = (String) table.getValueAt(row, 1); // Coluna "Tipo de Entrada"
+            if ("Entrada".equalsIgnoreCase(tipoEntrada)) {
+                component.setBackground(new Color(200, 255, 200)); // Verde para entradas
+            } else if ("Saída".equalsIgnoreCase(tipoEntrada)) {
+                component.setBackground(new Color(255, 200, 200)); // Vermelho para saídas
+            } else {
+                component.setBackground(Color.WHITE); // Branco padrão
             }
-        };
-        tabelaDespesas = new JTable(modeloTabela);
+            return component;
+        }
+    });
+    JScrollPane scrollTabela = new JScrollPane(tabelaDespesas);
+    scrollTabela.setBorder(BorderFactory.createTitledBorder("Tabela Financeira"));
 
-        // Impede que as colunas sejam movidas
-        JTableHeader cabecalho = tabelaDespesas.getTableHeader();
-        cabecalho.setReorderingAllowed(false);
+    // Painel inferior com botões
+    JPanel painelBotoes = new JPanel();
+    JButton botaoAdicionarReceita = new JButton("Adicionar Receita");
+    JButton botaoAdicionarDespesa = new JButton("Adicionar Despesa");
+    JButton sair = new JButton("Sair");
 
-        tabelaDespesas.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                String tipoEntrada = (String) table.getValueAt(row, 1); // Coluna "Tipo de Entrada"
-                if ("Entrada".equalsIgnoreCase(tipoEntrada)) {
-                    component.setBackground(new Color(200, 255, 200)); // Verde para entradas
-                } else if ("Saída".equalsIgnoreCase(tipoEntrada)) {
-                    component.setBackground(new Color(255, 200, 200)); // Vermelho para saídas
-                } else {
-                    component.setBackground(Color.WHITE); // Branco padrão
-                }
-                return component;
-            }
-        });
-        JScrollPane scrollTabela = new JScrollPane(tabelaDespesas);
-        scrollTabela.setBorder(BorderFactory.createTitledBorder("Lista de Despesas"));
+    painelBotoes.add(botaoAdicionarReceita);
+    painelBotoes.add(botaoAdicionarDespesa);
+    painelBotoes.add(sair);
 
-        // Painel inferior com botões
-        JPanel painelBotoes = new JPanel();
-        JButton botaoAdicionarReceita = new JButton("Adicionar Receita");
-        JButton botaoAdicionarDespesa = new JButton("Adicionar Despesa");
-        JButton sair = new JButton("Sair");
+    // Painéis à janela principal
+    add(painelSuperior, BorderLayout.NORTH); // Adiciona o painel superior com resumo e busca
+    add(scrollTabela, BorderLayout.CENTER);
+    add(painelBotoes, BorderLayout.SOUTH);
 
-        painelBotoes.add(botaoAdicionarReceita);
-        painelBotoes.add(botaoAdicionarDespesa);
-        painelBotoes.add(sair);
-
-        // Painéis à janela principal
-        add(painelResumo, BorderLayout.NORTH);
-        add(scrollTabela, BorderLayout.CENTER);
-        add(painelBotoes, BorderLayout.SOUTH);
-
-        // Ação para o botão de adicionar receita
-        botaoAdicionarReceita.addActionListener(e -> {
-            TelaAdicionarReceita telaAdicionarReceita = new TelaAdicionarReceita();
-            telaAdicionarReceita.setVisible(true);
-            atualizarValores();
-            atualizarResumo();
-            atualizarTabelaDespesas();
-        });
-
-        // Ação para o botão de adicionar despesa
-        botaoAdicionarDespesa.addActionListener(e -> {
-            TelaAdicionarDespesa telaAdicionarDespesa = new TelaAdicionarDespesa();
-            telaAdicionarDespesa.setVisible(true);
-            atualizarValores();
-            atualizarResumo();
-            atualizarTabelaDespesas();
-        });
-
-        // Ação para o botão de sair
-        sair.addActionListener(e -> {
-            int resposta = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja sair?", "Confirmar saída", JOptionPane.YES_NO_OPTION);
-            if (resposta == JOptionPane.YES_OPTION) {
-                System.exit(0);
-            }
-        });
-
-        // Atualizar os valores a partir dos arquivos CSV
+    // Ação para o botão de adicionar receita
+    botaoAdicionarReceita.addActionListener(e -> {
+        TelaAdicionarReceita telaAdicionarReceita = new TelaAdicionarReceita();
+        telaAdicionarReceita.setVisible(true);
         atualizarValores();
         atualizarResumo();
         atualizarTabelaDespesas();
+    });
+
+    // Ação para o botão de adicionar despesa
+    botaoAdicionarDespesa.addActionListener(e -> {
+        TelaAdicionarDespesa telaAdicionarDespesa = new TelaAdicionarDespesa();
+        telaAdicionarDespesa.setVisible(true);
+        atualizarValores();
+        atualizarResumo();
+        atualizarTabelaDespesas();
+    });
+
+    // Ação para o botão de sair
+    sair.addActionListener(e -> {
+        int resposta = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja sair?", "Confirmar saída", JOptionPane.YES_NO_OPTION);
+        if (resposta == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
+    });
+
+    // Ação para o campo de busca
+    campoBusca.getDocument().addDocumentListener(new DocumentListener() {
+        @Override
+        public void insertUpdate(DocumentEvent e) {
+            filtrarTabela(campoBusca.getText());
+        }
+
+        @Override
+        public void removeUpdate(DocumentEvent e) {
+            filtrarTabela(campoBusca.getText());
+        }
+
+        @Override
+        public void changedUpdate(DocumentEvent e) {
+            filtrarTabela(campoBusca.getText());
+        }
+    });
+
+    // Atualizar os valores a partir dos arquivos CSV
+    atualizarValores();
+    atualizarResumo();
+    atualizarTabelaDespesas();
+}
+
+    private void filtrarTabela(String textoBusca) {
+        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(modeloTabela);
+        tabelaDespesas.setRowSorter(sorter);
+        RowFilter<DefaultTableModel, Object> rowFilter = RowFilter.regexFilter("(?i)" + textoBusca); // Filtro sem case-sensitive
+        sorter.setRowFilter(rowFilter);
     }
 
     private JPanel criarPainelResumo(String titulo, JLabel valorLabel, Color cor) {
