@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.text.NumberFormatter;
 public class TelaAdicionarReceita extends JFrame {
@@ -79,14 +81,19 @@ public class TelaAdicionarReceita extends JFrame {
             }
             // Convertendo valor para número
             double valor = ((Number) campoValor.getValue()).doubleValue();
+            // Gerando data e hora atual
+            String dataHoraAtual = java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"));
+            
             // Criando a receita
-            Receita receita = new Receita(1, valor, descricao, categoria, "2025-01-09T14:00:00");
+            int idReceita = GerenciadorReceitasCSV.getProximoIdReceita();
+            Receita receita = new Receita(idReceita, valor, descricao, categoria, dataHoraAtual);
             // Salvar receita no arquivo CSV
             GerenciadorReceitasCSV.salvarReceitas(java.util.List.of(receita));
             JOptionPane.showMessageDialog(this, "Receita salva com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             dispose(); // Fecha a janela após salvar
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, "Erro ao salvar a receita.", "Erro", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(TelaAdicionarDespesa.class.getName()).log(Level.SEVERE, null, e);
+            JOptionPane.showMessageDialog(this, "Erro ao salvar a despesa.", "Erro", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
         }
     }

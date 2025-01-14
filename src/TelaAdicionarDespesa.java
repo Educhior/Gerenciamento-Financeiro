@@ -12,14 +12,19 @@ public class TelaAdicionarDespesa extends JFrame {
     public TelaAdicionarDespesa() {
         // Definições básicas da janela
         setTitle("Adicionar Despesas");
-        setSize(400, 300);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null); // Centraliza a janela
-        setLayout(new GridLayout(6, 2, 10, 10)); // Usando GridLayout simples
-        // Inicializando os componentes
-        JLabel labelValor = new JLabel("Valor (R$):");
-        
+        setSize(400, 250);
+       setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setLayout(new BorderLayout(10, 10));
+
+        // Painel central
+        JPanel painelCentral = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
         // Configurando o campo de valor com máscara numérica
+        JLabel labelValor = new JLabel("Valor (R$):");
         NumberFormatter formatter = new NumberFormatter(new DecimalFormat("#,##0.00"));
         formatter.setValueClass(Double.class);
         formatter.setAllowsInvalid(false);
@@ -27,22 +32,39 @@ public class TelaAdicionarDespesa extends JFrame {
         campoValor = new JFormattedTextField(formatter);
         campoValor.setColumns(10);
         JLabel labelDescricao = new JLabel("Descrição:");
-        campoDescricao = new JTextField();
+        campoDescricao = new JTextField(20);
         JLabel labelCategoria = new JLabel("Categoria:");
-        campoCategoria = new JTextField();
-        // Botões
+        campoCategoria = new JTextField(20);
+
+        // Adicionando componentes ao painel central
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        painelCentral.add(labelValor, gbc);
+        gbc.gridx = 1;
+        painelCentral.add(campoValor, gbc);
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        painelCentral.add(labelDescricao, gbc);
+        gbc.gridx = 1;
+        painelCentral.add(campoDescricao, gbc);
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        painelCentral.add(labelCategoria, gbc);
+        gbc.gridx = 1;
+        painelCentral.add(campoCategoria, gbc);
+
+
+        // Painel de botões
+        JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         botaoSalvar = new JButton("Salvar Despesa");
         botaoCancelar = new JButton("Cancelar");
-        // Adicionando os componentes ao layout
-        add(labelValor);
-        add(campoValor);
-        add(labelDescricao);
-        add(campoDescricao);
-        add(labelCategoria);
-        add(campoCategoria);
-        // Adicionando os botões de ação
-        add(botaoSalvar);
-        add(botaoCancelar);
+        painelBotoes.add(botaoSalvar);
+        painelBotoes.add(botaoCancelar);
+
+        // Adicionando painéis à janela
+        add(painelCentral, BorderLayout.CENTER);
+        add(painelBotoes, BorderLayout.SOUTH);
+
         // Ações dos botões
         botaoSalvar.addActionListener(e -> salvarDespesa());
         botaoCancelar.addActionListener(e -> dispose());  // Fecha a janela
@@ -61,7 +83,7 @@ public class TelaAdicionarDespesa extends JFrame {
             double valor = ((Number) campoValor.getValue()).doubleValue();
             // Gerando data e hora atual
             String dataHoraAtual = java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"));
-            // Criando a despesa (gerando um id sequencial, por exemplo)
+            // Criando a despesa
             int idDespesa = GerenciadorDespesasCSV.getProximoIdDespesa();
             Despesa despesa = new Despesa(idDespesa, valor, descricao, categoria, dataHoraAtual);
             // Salvar despesa no arquivo CSV

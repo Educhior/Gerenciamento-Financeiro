@@ -17,4 +17,21 @@ public class GerenciadorReceitasCSV {
 
         writer.close();
     }
+
+    public static int getProximoIdReceita() throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader(ARQUIVO_RECEITAS));
+        String linha;
+        int idMax = 0;
+
+        while ((linha = reader.readLine()) != null) {
+            String[] campos = linha.split(",");
+            int id = Integer.parseInt(campos[0]);
+            if (id > idMax) {
+                idMax = id;
+            }
+        }
+
+        reader.close();
+        return idMax + 1;
+    }
 }
