@@ -21,3 +21,18 @@ O projeto de Gerenciamento Financeiro é um sistema para controle de receitas e 
 4. **Atualização dos Totais**:
     - A TelaPrincipal atualiza automaticamente os totais após cada registro.
 
+Como Usar o Programa
+Siga os passos abaixo para utilizar o Gerenciador Financeiro:
+
+Baixe o programa
+Faça o download do arquivo Gerenciador.Financeiro.jar e salve-o em uma pasta de sua preferência.
+
+Prepare os arquivos CSV
+Crie dois arquivos CSV na mesma pasta onde o .jar está localizado:
+
+receitas.csv: Para registrar suas receitas.
+despesas.csv: Para registrar suas despesas.
+Execute o programa
+Dê um duplo clique no arquivo Gerenciador.Financeiro.jar para iniciar o programa.
+
+Certifique-se de que os arquivos CSV estão configurados corretamente para que o programa funcione sem erros.
