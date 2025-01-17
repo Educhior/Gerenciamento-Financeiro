@@ -32,7 +32,7 @@ public class GerenciadorCSV {
             String linha;
             while ((linha = br.readLine()) != null) {
                 String[] partes = linha.split(",");
-                if (partes.length == 5) { // Garante que a linha tenha 5 elementos
+                if (partes.length == 5) {
                     dados.add(partes);
                 }
             }

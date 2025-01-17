@@ -1,6 +1,6 @@
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.*;
 
 public class TelaLogin extends JFrame {
     private JTextField campoEmail;
@@ -16,7 +16,7 @@ public class TelaLogin extends JFrame {
         setLayout(new BorderLayout());
         setResizable(false);
 
-        // Painel Superior (Logo ou Título)
+        // Painel Superior
         JPanel painelSuperior = new JPanel();
         JLabel titulo = new JLabel("Gerenciador Financeiro");
         titulo.setFont(new Font("Arial", Font.BOLD, 20));
@@ -48,7 +48,7 @@ public class TelaLogin extends JFrame {
         botaoEsqueciSenha.setFocusPainted(false);
         painelCentral.add(botaoEsqueciSenha);
 
-        // Painel Inferior (Mensagem ou Footer)
+        // Painel Inferior (Footer)
         JPanel painelInferior = new JPanel();
         JLabel footer = new JLabel("© 2024 - Gerenciador Financeiro");
         footer.setFont(new Font("Arial", Font.ITALIC, 12));

@@ -43,7 +43,7 @@ public class TelaPrincipal extends JFrame {
         campoBusca = new JTextField(15);
         painelBusca.add(campoBusca);
 
-        // ComboBox para filtro de tipo de entrada (Entrada, Saída, Todos)
+        //Filtro (Entrada, Saída, Todos)
         JComboBox<String> filtroTipo = new JComboBox<>(new String[]{"Todos", "Entrada", "Saída"});
         painelBusca.add(new JLabel("Filtro de Tipo:"));
         painelBusca.add(filtroTipo);
@@ -96,7 +96,7 @@ public class TelaPrincipal extends JFrame {
         painelBotoes.add(sair);
 
         // Painéis à janela principal
-        add(painelSuperior, BorderLayout.NORTH); // Adiciona o painel superior com resumo e busca
+        add(painelSuperior, BorderLayout.NORTH);
         add(scrollTabela, BorderLayout.CENTER);
         add(painelBotoes, BorderLayout.SOUTH);
 
@@ -197,11 +197,11 @@ public class TelaPrincipal extends JFrame {
 
         // Adiciona as despesas na tabela
         for (String[] linha : despesasCSV) {
-            String data = linha[4]; // Data
-            String tipoEntrada = "Saída"; // Tipo fixo para despesas
-            String descricao = linha[2]; // Descrição
-            String categoria = linha[3]; // Categoria
-            String valor = linha[1]; // Valor
+            String data = linha[4];
+            String tipoEntrada = "Saída"; 
+            String descricao = linha[2]; 
+            String categoria = linha[3]; 
+            String valor = linha[1]; 
 
             modeloTabela.addRow(new Object[]{data, tipoEntrada, descricao, categoria, valor});
         }
@@ -211,11 +211,11 @@ public class TelaPrincipal extends JFrame {
 
         // Adiciona as receitas na tabela
         for (String[] linha : receitasCSV) {
-            String data = linha[4]; // Data
-            String tipoEntrada = "Entrada"; // Tipo fixo para receitas
-            String descricao = linha[2]; // Descrição
-            String categoria = linha[3]; // Categoria
-            String valor = linha[1]; // Valor
+            String data = linha[4]; 
+            String tipoEntrada = "Entrada"; 
+            String descricao = linha[2]; 
+            String categoria = linha[3]; 
+            String valor = linha[1]; 
 
             modeloTabela.addRow(new Object[]{data, tipoEntrada, descricao, categoria, valor});
         }
@@ -235,7 +235,6 @@ public class TelaPrincipal extends JFrame {
         }
 
         if (filtroTipo != null) {
-            // Corrigido: agora passamos os filtros como uma lista
             RowFilter<DefaultTableModel, Object> filtroCombinado = RowFilter.andFilter(List.of(filtroTexto, filtroTipo));
             sorter.setRowFilter(filtroCombinado);
         } else {
